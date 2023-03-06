@@ -2,32 +2,84 @@ import React, { useState, useEffect } from 'react';
 import AddProduct from '../AddProduct';
 import ProductList from '../ProductList';
 import ShoppingCart from '../ShoppingCart'
+import SignIn from '../SignIn';
+import SignUp from '../SignUp';
+import UserInfo from '../UserInfo';
+import { useCookies } from 'react-cookie';
 
 const App = () => {
   const [cart, setCart] = useState([]);
   const [products, setProducts] = useState([]);
-  const [isAdminLogged, setisAdminLogged] = useState(false);
+  const [currentUser, setCurrentUser] = useState({})
+  const [showSignIn, setShowSignIn] = useState(true)
+  const [cookies, _, removeCookie] = useCookies(['auth-token']);
 
   const addToCart = product => {
     if (product.quantity > 0){
-      setCart([...cart, product]);
+      fetch("http://127.0.0.1:5000/add-to-cart",{
+        method: "POST",
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-access-token': cookies?.authToken
+        },
+        body: JSON.stringify({item: product })
+      })
+      .then(response => response.json())
+      .then(setCart([...cart, product]))
     }
   };
 
   const getProducts = () => (
     fetch("http://127.0.0.1:5000/products")
     .then(response => response.json())
-    .then(data => (setProducts(data)))
-    .then(() => (console.log("Gets here")))
-  )
+    .then(data => (setProducts(data))))
 
   useEffect(() => {
+    getCurrentUser()
     getProducts()
   }, []);
 
+  const getCurrentUser = () => (
+    fetch("http://127.0.0.1:5000/current-user",{
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': cookies?.authToken
+      }
+    })
+    .then(response => response.json())
+    .then(data => (setCurrentUser(data['current_user'])))
+  )
+
+  const logoutHandler = () => {
+    removeCookie('authToken');
+    setCurrentUser({});
+  };
+
+  const userBar = () => {
+    if (currentUser?.name){
+      return (
+        <UserInfo currentUser={currentUser} 
+        logOutHandler = {() => (logoutHandler())}/>
+      )
+    }
+    else{
+      return(
+        <div>
+          {showSignIn && 
+            <SignIn signUpHandler = {() => (setShowSignIn(false))} 
+                    setCurrentUser={(user) => (setCurrentUser(user))}/>}
+          {!showSignIn && <SignUp signInHandler={() => (setShowSignIn(true))}></SignUp>}
+        </div>
+      )
+    }
+  }
+
+  const isAdminLogged = currentUser?.isAdmin || false
+
   return (
     <div>
-      <button onClick={() => (setisAdminLogged(!isAdminLogged))}> {isAdminLogged ? "Log out": "Login as Admin"} </button>
+      {userBar()}
       {isAdminLogged && <AddProduct getProducts={getProducts}/>}
       <h1>Product Catalog</h1>
       <ProductList 

@@ -1,5 +1,9 @@
+import { useCookies } from 'react-cookie';
+
+
 const ShoppingCart = ({cart, setCart}) => {
 
+  const [cookies, _, removeCookie] = useCookies(['auth-token']);
   const total = cart.reduce((acc, product) => acc + parseInt(product.price,10) * parseInt(product.quantity,10), 0);
 
   const buyHandler = () => {
@@ -11,7 +15,10 @@ const ShoppingCart = ({cart, setCart}) => {
 
     const requestOptions = {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'x-access-token': cookies?.authToken
+      },
       body: JSON.stringify({ items })
     };
 

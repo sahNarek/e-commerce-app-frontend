@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 
-const AddProduct = ( {getProducts} ) => {
+const SignUp = ({signInHandler}) => {
     const { register, handleSubmit } = useForm();
     // const [data, setData] = useState("");
 
@@ -9,12 +9,12 @@ const AddProduct = ( {getProducts} ) => {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({"product":  data })
+            body: JSON.stringify({ ...data })
         }
 
         let responseIsSuccesfull = true
 
-        fetch("http://127.0.0.1:5000/products", requestOptions)
+        fetch("http://127.0.0.1:5000/sign-up", requestOptions)
         .then(response => {
             if (!response.ok){
                 responseIsSuccesfull = false                
@@ -24,7 +24,7 @@ const AddProduct = ( {getProducts} ) => {
         .then(data => {
             if (responseIsSuccesfull){
                 alert(data["message"])
-                getProducts()
+                // getProducts()
             }
             else{
                 throw new Error(data["message"])
@@ -37,16 +37,17 @@ const AddProduct = ( {getProducts} ) => {
     }
 
     return (
-        <form onSubmit={handleSubmit((data) => submitHandler(data))}>
-            <input {...register("name")} placeholder="Product name" />
-            <br/>
-            <input {...register("price")} placeholder="Product price" />
-            <br/>
-            <input type="number" min="1" {...register("in_stock_quantity")} placeholder="Product quantity" />
-            <br/>
-          <input type="submit" value="Add"/>
-        </form>
-    );
+    <form onSubmit={handleSubmit((data) => submitHandler(data))}>
+        <input {...register("name")} placeholder="Name" />
+        <br/>
+        <input {...register("email")} placeholder="Email" />
+        <br/>
+        <input {...register("password")} placeholder="Password" type="password"/>
+        <br/>
+        <input type="submit" value="Sign Up"/>
+        <button onClick={signInHandler}>Switch to Sign in</button>
+    </form>
+    )
 }
 
-export default AddProduct
+export default SignUp;
