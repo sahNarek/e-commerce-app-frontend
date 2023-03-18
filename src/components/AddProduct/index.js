@@ -14,7 +14,7 @@ const AddProduct = ( {getProducts} ) => {
 
         let responseIsSuccesfull = true
 
-        fetch("http://127.0.0.1:5000/products", requestOptions)
+        fetch("http://127.0.0.1:8000/products", requestOptions)
         .then(response => {
             if (!response.ok){
                 responseIsSuccesfull = false                

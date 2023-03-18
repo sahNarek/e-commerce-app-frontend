@@ -15,7 +15,7 @@ const Product = ({ id, name, price, addToCart, isAdminLogged, getProducts }) => 
         
         let responseIsSuccesfull = true
 
-        fetch(`http://127.0.0.1:5000/product/${id}`, requestOptions)
+        fetch(`http://127.0.0.1:8000/product/${id}`, requestOptions)
         .then(response => {
             if (!response.ok){
                 responseIsSuccesfull = false                

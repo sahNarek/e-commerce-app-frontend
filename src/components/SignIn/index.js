@@ -15,7 +15,7 @@ const SignIn = ({signUpHandler, setCurrentUser}) => {
 
         let responseIsSuccesfull = true
 
-        fetch("http://127.0.0.1:5000/sign-in", requestOptions)
+        fetch("http://127.0.0.1:8000/sign-in", requestOptions)
         .then(response => {
             if (!response.ok){
                 responseIsSuccesfull = false                

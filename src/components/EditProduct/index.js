@@ -14,7 +14,7 @@ const EditProduct = ( {getProducts, productId, closeForm} ) => {
 
         let responseIsSuccesfull = true
 
-        fetch(`http://127.0.0.1:5000/product/${productId}`, requestOptions)
+        fetch(`http://127.0.0.1:8000/product/${productId}`, requestOptions)
         .then(response => {
             if (!response.ok){
                 responseIsSuccesfull = false                

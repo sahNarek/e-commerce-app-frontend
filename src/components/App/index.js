@@ -16,7 +16,7 @@ const App = () => {
 
   const addToCart = product => {
     if (product.quantity > 0){
-      fetch("http://127.0.0.1:5000/add-to-cart",{
+      fetch("http://127.0.0.1:8000/add-to-cart",{
         method: "POST",
         headers: { 
           'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ const App = () => {
   };
 
   const getProducts = () => (
-    fetch("http://127.0.0.1:5000/products")
+    fetch("http://127.0.0.1:8000/products")
     .then(response => response.json())
     .then(data => (setProducts(data))))
 
@@ -40,7 +40,7 @@ const App = () => {
   }, []);
 
   const getCurrentUser = () => (
-    fetch("http://127.0.0.1:5000/current-user",{
+    fetch("http://127.0.0.1:8000/current-user",{
       method: "GET",
       headers: {
         'Content-Type': 'application/json',

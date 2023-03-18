@@ -22,7 +22,7 @@ const ShoppingCart = ({cart, setCart}) => {
       body: JSON.stringify({ items })
     };
 
-    fetch("http://127.0.0.1:5000/checkout", requestOptions)
+    fetch("http://127.0.0.1:8000/checkout", requestOptions)
     .then(response => response.json())
     .then((data) => {
       alert(data.message)
