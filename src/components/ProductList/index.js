@@ -5,7 +5,7 @@ const ProductList = ({addToCart, products, isAdminLogged, getProducts }) => {
   
   return (
     <div>
-      {products.map(product => (
+      {products && products.map(product => (
         <Product 
           key={product.id} 
           {...product} 
